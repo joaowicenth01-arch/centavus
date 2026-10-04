@@ -2,7 +2,7 @@
         /* ===== CENTAVUS LOGIN EXPERIENCE ===== */
         #loginScreen{position:fixed;inset:0;z-index:9999;display:flex;overflow:hidden;background:#0b1110;transition:opacity .35s ease,transform .35s ease}
         #loginScreen.login-leaving{opacity:0;pointer-events:none;transform:scale(1.015)}
-        body.no-scroll{overflow:hidden;height:100vh}
+        body.no-scroll{overflow:hidden;height:100vh;height:100dvh}
         .login-mobile-brand{display:none}
         [id^="sec"]{scroll-margin-top:104px}
         .mobile-nav-item{color:var(--text-secondary);transition:color .2s ease}
@@ -36,7 +36,7 @@
         .login-form{width:100%;max-width:390px;margin:auto}
         .login-form h2{font-family:'Manrope',sans-serif;font-size:30px;font-weight:800;letter-spacing:-.04em}
         .login-form-sub{font-size:13px;color:#6F807C;margin-top:7px;margin-bottom:30px}
-        .login-hint{color:#6F807C}
+        .login-hint{color:#6F807C;text-align:center;margin-top:16px;font-size:11px}
         .login-label{font-size:11px;color:#A8B5B2;font-weight:700;margin:0 0 8px 2px;display:block}
         .login-input-wrap{position:relative;margin-bottom:17px}
         .login-input-wrap i{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#6F807C;font-size:13px}
@@ -65,7 +65,7 @@
             .login-panel{padding:40px 26px}
             .login-form{max-width:none}
             .login-mobile-brand{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:26px}
-            .register-card{padding:24px 20px;max-height:86vh;overflow-y:auto}
+            .register-card{padding:24px 20px;max-height:86vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
         }
         @media(max-width:480px){
             .login-wrap{width:94vw;border-radius:26px}
@@ -80,4 +80,66 @@
         /* --- Logomarca Centavus (imagem ao lado do nome) --- */
         .login-brand-mark,.cv-splash-mark,.header-brand-mark{overflow:hidden;background:#111d33}
         .login-brand-mark img,.cv-splash-mark img,.header-brand-mark img{width:100%;height:100%;object-fit:cover;display:block;border-radius:inherit}
+
+        /* ================================================================
+           LOGIN NO CELULAR — toque, teclado virtual e área segura
+           ================================================================ */
+        @media(max-width:900px){
+            /* a tela inteira rola: o teclado nunca deixa o botão inacessível */
+            #loginScreen{
+                overflow-y:auto;
+                overflow-x:hidden;
+                align-items:flex-start;
+                -webkit-overflow-scrolling:touch;
+                overscroll-behavior:contain;
+                padding-bottom:env(safe-area-inset-bottom,0px)
+            }
+            /* respeita a "ilha" / barra do iPhone */
+            .login-wrap{margin:max(16px,env(safe-area-inset-top)) auto 28px}
+
+            /* 16px impede o zoom automático do iOS ao tocar num campo */
+            .login-input{font-size:16px;height:52px;padding-right:54px}
+            .login-input::placeholder{color:#6F807C;opacity:1}
+
+            /* olho da senha com alvo de toque de 44x44px */
+            .login-password-toggle{
+                width:44px;height:44px;right:4px;top:50%;transform:translateY(-50%);
+                display:flex;align-items:center;justify-content:center;
+                border-radius:12px;color:#A8B5B2
+            }
+
+            .login-form h2{font-size:27px}
+            .login-form-sub{font-size:13.5px;margin-bottom:24px}
+            .login-label{font-size:12px;margin-bottom:7px}
+
+            /* linhas e links com área de toque confortável */
+            .login-row{font-size:12px;margin:4px 0 18px;gap:10px}
+            .login-check,.login-row .login-link{min-height:44px;display:inline-flex;align-items:center}
+            .login-hint{font-size:12.5px;margin-top:14px}
+            .login-hint .login-link,.register-card .login-link{min-height:44px;display:inline-flex;align-items:center}
+
+            .login-submit{height:54px;font-size:14.5px;border-radius:16px}
+            .login-error{font-size:12px;padding:10px 12px;border-radius:12px}
+            .login-demo,.login-security{font-size:11.5px;line-height:1.5}
+            .login-security{margin-top:20px;gap:8px}
+
+            /* link de fechar dos modais (criar conta / redefinir senha) */
+            .register-close{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:12px}
+        }
+
+        /* celular deitado: altura curta, encolhe os espaços mas mantém tudo visível */
+        @media(max-width:900px) and (max-height:520px){
+            .login-wrap{margin:10px auto}
+            .login-panel{padding:16px}
+            .login-mobile-brand{margin-bottom:12px}
+            .login-form-sub{margin-bottom:16px}
+            .login-hint,.login-demo{margin-top:10px}
+            .login-security{margin-top:14px}
+        }
+
+        /* aparelhos bem estreitos (320-360px): empilha a linha de "lembrar" */
+        @media(max-width:360px){
+            .login-panel{padding:26px 14px}
+            .login-row{flex-direction:column;align-items:flex-start;gap:2px}
+        }
 

@@ -168,7 +168,8 @@
         /* flush ao sair da página: garante que nada fique só na memória */
         window.addEventListener('beforeunload',()=>{
             const local=(typeof cvIsLocal==='function')&&cvIsLocal();
-            if(syncTimer&&lastUid()&&!local){clearTimeout(syncTimer);syncTimer=null;
+            const cloud=(typeof cvIsCloud==='function')&&cvIsCloud();
+            if(syncTimer&&lastUid()&&!local&&!cloud){clearTimeout(syncTimer);syncTimer=null;
                 try{fetch('/api/me/state',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({state:stateSnapshot()}),credentials:'same-origin',keepalive:true});}catch(e){}
             }
         });

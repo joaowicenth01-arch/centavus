@@ -2,7 +2,10 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="color-scheme" content="dark">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="description" content="Centavus — plataforma financeira para organizar gastos, metas e investimentos em um só lugar.">
     <meta name="theme-color" content="#101010">
     <title>Centavus 2.0 — Dashboard Financeiro</title>
@@ -69,12 +72,12 @@
                     <p class="login-form-sub">Entre para acompanhar sua vida financeira em um só lugar.</p>
                     <div id="loginError" class="login-error" role="alert" aria-live="polite">Preencha seu e-mail e sua senha para continuar.</div>
                     <label class="login-label" for="loginEmail">E-mail</label>
-                    <div class="login-input-wrap"><i class="fa-solid fa-envelope"></i><input id="loginEmail" name="email" class="login-input" type="email" placeholder="voce@email.com" autocomplete="email" inputmode="email" spellcheck="false" required></div>
+                    <div class="login-input-wrap"><i class="fa-solid fa-envelope"></i><input id="loginEmail" name="email" class="login-input" type="email" placeholder="voce@email.com" autocomplete="email" inputmode="email" enterkeyhint="next" autocapitalize="none" autocorrect="off" spellcheck="false" required></div>
                     <label class="login-label" for="loginPassword">Senha</label>
-                    <div class="login-input-wrap"><i class="fa-solid fa-lock"></i><input id="loginPassword" name="password" class="login-input" type="password" placeholder="Mínimo de 8 caracteres" autocomplete="current-password" minlength="8" required><button type="button" class="login-password-toggle" onclick="toggleLoginPassword()" aria-label="Mostrar ou ocultar senha"><i id="loginPasswordIcon" class="fa-solid fa-eye"></i></button></div>
+                    <div class="login-input-wrap"><i class="fa-solid fa-lock"></i><input id="loginPassword" name="password" class="login-input" type="password" placeholder="Mínimo de 8 caracteres" autocomplete="current-password" enterkeyhint="go" autocapitalize="none" autocorrect="off" spellcheck="false" minlength="8" required><button type="button" class="login-password-toggle" onclick="toggleLoginPassword()" aria-label="Mostrar ou ocultar senha"><i id="loginPasswordIcon" class="fa-solid fa-eye"></i></button></div>
                     <div class="login-row"><label class="login-check"><input type="checkbox" id="rememberLogin"> Lembrar de mim</label><a href="#" class="login-link" onclick="forgotPassword(event)">Esqueci minha senha</a></div>
                     <button id="loginSubmit" class="login-submit" type="submit"><i class="fa-solid fa-right-to-bracket mr-2"></i> Entrar no Centavus</button>
-                    <div class="login-hint" style="text-align:center;margin-top:16px;font-size:11px;">Ainda não tem uma conta? <a href="#" class="login-link" onclick="createCentavusAccount();return false;">Criar conta</a></div>
+                    <div class="login-hint">Ainda não tem uma conta? <a href="#" class="login-link" onclick="createCentavusAccount();return false;">Criar conta</a></div>
                     <div id="loginDemoHint" class="login-demo">Primeiro acesso: <span>crie sua conta para entrar</span></div>
                     <div class="login-security"><i class="fa-solid fa-shield-halved"></i> Conta protegida: senha com hash e sessão segura no servidor</div>
                 </form>
@@ -100,7 +103,7 @@
                 <label class="login-label" for="registerEmail">E-mail</label>
                 <div class="login-input-wrap"><i class="fa-solid fa-envelope"></i><input id="registerEmail" class="login-input" type="email" placeholder="voce@email.com" autocomplete="email" required></div>
                 <label class="login-label" for="registerPassword">Senha</label>
-                <div class="login-input-wrap"><i class="fa-solid fa-lock"></i><input id="registerPassword" class="login-input" type="password" placeholder="Mínimo de 6 caracteres" autocomplete="new-password" minlength="6" required><button type="button" class="login-password-toggle" onclick="toggleRegisterPassword('registerPassword','registerPasswordIcon')" aria-label="Mostrar senha"><i id="registerPasswordIcon" class="fa-solid fa-eye"></i></button></div>
+                <div class="login-input-wrap"><i class="fa-solid fa-lock"></i><input id="registerPassword" class="login-input" type="password" placeholder="Mínimo de 8 caracteres" autocomplete="new-password" enterkeyhint="next" autocapitalize="none" autocorrect="off" spellcheck="false" minlength="8" required><button type="button" class="login-password-toggle" onclick="toggleRegisterPassword('registerPassword','registerPasswordIcon')" aria-label="Mostrar senha"><i id="registerPasswordIcon" class="fa-solid fa-eye"></i></button></div>
                 <label class="login-label" for="registerConfirm">Confirmar senha</label>
                 <div class="login-input-wrap"><i class="fa-solid fa-lock"></i><input id="registerConfirm" class="login-input" type="password" placeholder="Repita sua senha" autocomplete="new-password" required><button type="button" class="login-password-toggle" onclick="toggleRegisterPassword('registerConfirm','registerConfirmIcon')" aria-label="Mostrar senha"><i id="registerConfirmIcon" class="fa-solid fa-eye"></i></button></div>
                 <button class="login-submit mt-1" type="submit"><i class="fa-solid fa-user-plus mr-2"></i> Criar conta</button>
@@ -1606,6 +1609,8 @@
 
     <script src="js/state.js"></script>
     <script src="js/confirm.js"></script>
+    <script src="js/config.js"></script>
+    <script src="js/supabaseApi.js"></script>
     <script src="js/localApi.js"></script>
     <script src="js/api.js"></script>
     <script src="js/charts.js"></script>

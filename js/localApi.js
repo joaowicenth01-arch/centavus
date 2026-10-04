@@ -35,6 +35,7 @@ let cvModeState = null;
 let cvModePromise = null;
 
 function cvIsLocal(){ return cvModeState === 'local'; }
+function cvIsCloud(){ return cvModeState === 'supabase'; }
 
 /* textos da tela que mudam conforme existe servidor ou não */
 function applyCvModeText(){
@@ -44,7 +45,9 @@ function applyCvModeText(){
     const sec = document.querySelector('.login-security');
     if (sec) sec.innerHTML = local
         ? '<i class="fa-solid fa-shield-halved"></i> Conta protegida: senha com hash e dados guardados neste navegador'
-        : '<i class="fa-solid fa-shield-halved"></i> Conta protegida: senha com hash e sessão segura no servidor';
+        : (typeof cvIsCloud === 'function' && cvIsCloud())
+            ? '<i class="fa-solid fa-cloud"></i> Conta sincronizada: entre com o mesmo e-mail e senha em qualquer aparelho'
+            : '<i class="fa-solid fa-shield-halved"></i> Conta protegida: senha com hash e sessão segura no servidor';
     const note = document.getElementById('settingsDataNote');
     if (note) note.textContent = local
         ? 'Modo teste (sem servidor): seus dados ficam salvos neste navegador. Publique junto com o servidor (npm start) para valer contas reais e sincronização entre aparelhos.'
@@ -70,7 +73,11 @@ async function cvDetectMode(){
             local = !(json && json.ok);
         }
     } catch(err){ local = true; }
-    cvModeState = local ? 'local' : 'server';
+
+    if (!local) cvModeState = 'server';
+    else if (typeof cvSupabaseConfigured === 'function' && cvSupabaseConfigured()) cvModeState = 'supabase';
+    else cvModeState = 'local';
+
     try{ applyCvModeText(); }catch(e){}
     return cvModeState;
 }

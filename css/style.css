@@ -29,12 +29,21 @@
             --glow-accent: 0 0 30px rgba(128, 112, 240, 0.25);
         }
 
+        html {
+            -webkit-text-size-adjust: 100%;
+            text-size-adjust: 100%;
+        }
+
         body {
             background-color: var(--bg);
             color: var(--text-primary);
             font-family: 'Inter', sans-serif;
             overflow-x: hidden;
+            -webkit-tap-highlight-color: rgba(48, 160, 128, 0.25);
         }
+
+        /* alvos de toque grandes o bastante em qualquer aparelho */
+        a, button, label, [role="button"] { -webkit-tap-highlight-color: rgba(48, 160, 128, 0.25); }
 
         h1, h2, h3, .brand-font {
             font-family: 'Manrope', 'Inter', sans-serif;

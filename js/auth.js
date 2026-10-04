@@ -241,7 +241,15 @@
                 document.getElementById('resetForm').reset();
                 closeResetModal();
                 try{ history.replaceState(null,'',window.location.pathname); }catch(err){}
-                await enterWithProfile(data.user,{message:'Senha redefinida! Já pode entrar com a nova senha.'});
+                if(data&&data.user){
+                    await enterWithProfile(data.user,{message:'Senha redefinida! Já pode entrar com a nova senha.'});
+                }else{
+                    /* nuvem: a sessão foi encerrada de propósito, volta pro login */
+                    const pass=document.getElementById('loginPassword'); if(pass)pass.value='';
+                    showLoginError('Senha redefinida! Já pode entrar com a nova senha.','info');
+                    setLoginScreen(true);
+                    setTimeout(()=>{const em=document.getElementById('loginEmail');if(em)em.focus();},400);
+                }
             }catch(err){
                 showResetError(err&&err.message?err.message:'Não foi possível redefinir a senha.');
             }
@@ -250,10 +258,13 @@
         function updateDemoHint(){
             const el=document.getElementById('loginDemoHint');
             if(!el)return;
+            const cloud=(typeof cvIsCloud==='function')&&cvIsCloud();
             const local=(typeof cvIsLocal==='function')&&cvIsLocal();
-            el.innerHTML=local
-                ? 'Modo teste (sem servidor): <span>contas e dados ficam só neste navegador</span>'
-                : 'Conta protegida no servidor: <span>senha com hash e sessão segura</span>';
+            el.innerHTML = cloud
+                ? 'Sua conta vai junto: <span>mesmo e-mail e senha no celular e no computador</span>'
+                : local
+                    ? 'Modo teste (sem servidor): <span>contas e dados ficam só neste navegador</span>'
+                    : 'Conta protegida no servidor: <span>senha com hash e sessão segura</span>';
         }
 
         function updateHeaderDate(){
@@ -449,6 +460,25 @@
                 const p=new URLSearchParams(window.location.search);
                 const token=p.get('reset');
                 if(token){ openResetModal(token); try{history.replaceState(null,'',window.location.pathname);}catch(e){} }
+            }catch(e){}
+
+            /* link de recuperação do Supabase: /#access_token=...&type=recovery */
+            try{
+                const hash=String(window.location.hash||'');
+                if(hash.indexOf('type=recovery')>-1){
+                    const hp=new URLSearchParams(hash.replace(/^#/,''));
+                    const at=hp.get('access_token'), rt=hp.get('refresh_token');
+                    if(at&&rt&&typeof sbSetSession==='function'){
+                        sbSetSession({access_token:at,refresh_token:rt,expires_in:Number(hp.get('expires_in'))||3600,user:null});
+                        openResetModal(at);
+                    }
+                    try{history.replaceState(null,'',window.location.pathname+window.location.search);}catch(e){}
+                }
+                /* projeto em fluxo PKCE: o código só troca com o verifier, que não temos */
+                if(/[?&]code=/.test(String(window.location.search||''))){
+                    showLoginError('O link de redefinição chegou em formato não suportado. No Supabase: Authentication → URL Configuration → coloque este endereço como Site URL.','info');
+                    try{history.replaceState(null,'',window.location.pathname);}catch(e){}
+                }
             }catch(e){}
 
             document.getElementById('registerModal')?.addEventListener('click',ev=>{if(ev.target.id==='registerModal')closeRegister()});

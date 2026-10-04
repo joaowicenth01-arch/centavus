@@ -7,8 +7,10 @@
 async function api(path, options) {
     const opts = Object.assign({ method: 'GET', headers: {} }, options || {});
 
-    /* sem servidor no ar (hospedagem estática, file://, front solto) → backend local */
+    /* sem servidor no ar (hospedagem estática, file://, front solto) → backend local
+       com as chaves do Supabase preenchidas em js/config.js → contas na nuvem */
     const mode = await cvApiMode();
+    if (mode === 'supabase' && typeof supabaseApi === 'function') return supabaseApi(path, opts);
     if (mode === 'local') return localApi(path, opts);
 
     if (opts.body !== undefined && typeof opts.body !== 'string') {
